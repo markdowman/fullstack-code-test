@@ -8,12 +8,12 @@ public class DBMigration {
   public static void main(String[] args) {
     Vertx vertx = Vertx.vertx();
     DBConnector connector = new DBConnector(vertx);
-    connector.query("CREATE TABLE IF NOT EXISTS service (" +
-                    "id int(11) unsiqned NOT NULL auto_increment," +
-                    "url VARCHAR(128) NOT NULL," +
-                    "name VARCHAR(128) NOT NULL," +
-                    "added NOT NULL," +
-                    "status VARCHAR(128)").setHandler(done -> {
+    connector.query("CREATE TABLE IF NOT EXISTS SERVICE (" +
+                    "`id` INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "`url` VARCHAR(128) NOT NULL," +
+                    "`name` VARCHAR(128) NOT NULL," +
+                    "`added` TIMESTAMP NOT NULL," +
+                    "`status` VARCHAR(128) NOT NULL);").setHandler(done -> {
       if(done.succeeded()){
         System.out.println("completed db migrations");
       } else {

@@ -14,6 +14,13 @@ import java.util.Random;
 
 public class BackgroundPoller {
 
+  /***
+   * Polls the state of all services retrieved from DAO
+   * Updates status of each service and persists
+   * @param vertx
+   * @param kryServiceDAO
+   * @return
+   */
   public Future<Void> pollServices(Vertx vertx, final KryServiceDAO kryServiceDAO) {
     Future<Void> future = Future.future();
     kryServiceDAO.findServices().setHandler(done -> {

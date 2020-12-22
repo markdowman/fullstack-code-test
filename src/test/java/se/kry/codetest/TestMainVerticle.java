@@ -50,7 +50,7 @@ public class TestMainVerticle {
   }
 
   @Test
-  @DisplayName("Start a web server on localhost responding to path /service on port 8080 and add a service")
+  @DisplayName("Start a web server on localhost and add a service")
   @Timeout(value = 10, timeUnit = TimeUnit.SECONDS)
   void start_http_server_add_service(Vertx vertx, VertxTestContext testContext) {
     JsonObject object = new JsonObject()
@@ -67,7 +67,7 @@ public class TestMainVerticle {
   }
 
   @Test
-  @DisplayName("Start a web server on localhost responding to path /service on port 8080")
+  @DisplayName("Start a web server on localhost, create a service then delete it")
   @Timeout(value = 10, timeUnit = TimeUnit.SECONDS)
   void start_http_server_create_delete_service(Vertx vertx, VertxTestContext testContext) {
     WebClient webClient = WebClient.create(vertx);
@@ -81,14 +81,16 @@ public class TestMainVerticle {
   }
 
   @Test
-  @DisplayName("Start a web server and poll until status moved from failed")
+  @DisplayName("Start a web server and poll until services status moves from failed")
   @Timeout(value = 100, timeUnit = TimeUnit.SECONDS)
   void start_http_server_and_poll(Vertx vertx, VertxTestContext testContext) {
+    // server poll is once every 100s
     WebClient webClient = WebClient.create(vertx);
     vertx.setPeriodic(1000 * 10, timerId -> {
       webClient.get(8080, "::1", "/service")
           .send(response -> {
             assertEquals(200, response.result().statusCode());
+            log.info("polling...");
             boolean isStatusChanged = response.result().bodyAsJsonArray()
                 .stream()
                 .anyMatch( o -> !((JsonObject)o).getString("status").equals("UNKNOWN"));
@@ -100,10 +102,11 @@ public class TestMainVerticle {
   }
 
   @Test
-  @DisplayName("Start a web server on localhost responding to path /service on port 8080")
+  @DisplayName("Start a web server on localhost and delete the last service created")
   @Timeout(value = 10, timeUnit = TimeUnit.SECONDS)
   void start_http_server_delete_last_service(Vertx vertx, VertxTestContext testContext) {
     WebClient webClient = WebClient.create(vertx);
+    // this relies on a service existing
     deleteLastService(webClient, testContext).setHandler( done -> testContext.completeNow());
   }
 
