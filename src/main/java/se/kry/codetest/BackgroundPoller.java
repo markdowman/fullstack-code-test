@@ -31,17 +31,17 @@ public class BackgroundPoller {
     WebClient.create(vertx)
         .get(service.getUrl())
         .send(response -> {
-              if (response.succeeded() && response.result().body().toString().equals("OK")) {
-                service.setStatus(ServiceStatus.OK);
-              } else {
-                service.setStatus(ServiceStatus.FAIL);
-              }
-              kryServiceDAO.updateStatus(service).setHandler(done -> {
-                if (done.failed()) {
-                  done.cause().printStackTrace();
-                }
-              });
-            });
+          if (response.succeeded() && response.result().body().toString().equals("OK")) {
+            service.setStatus(ServiceStatus.OK);
+          } else {
+            service.setStatus(ServiceStatus.FAIL);
+          }
+          kryServiceDAO.updateStatus(service).setHandler(done -> {
+            if (done.failed()) {
+              done.cause().printStackTrace();
+            }
+          });
+        });
     return future;
   }
 }

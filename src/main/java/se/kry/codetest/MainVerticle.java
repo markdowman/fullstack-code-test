@@ -8,6 +8,7 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,7 +39,7 @@ public class MainVerticle extends AbstractVerticle {
         });
   }
 
-  private void setRoutes(Router router){
+  private void setRoutes(Router router) {
     router.route("/*").handler(StaticHandler.create());
     router.get("/service").handler(this::getServices);
     router.post("/service").handler(this::addService);
@@ -46,7 +47,7 @@ public class MainVerticle extends AbstractVerticle {
   }
 
   private void getServices(RoutingContext req) {
-    serviceDAO.findServices().setHandler( h -> {
+    serviceDAO.findServices().setHandler(h -> {
       if (h.succeeded()) {
         List<KryService> services = h.result();
         List<JsonObject> jsonServices = services
@@ -72,7 +73,7 @@ public class MainVerticle extends AbstractVerticle {
   private void addService(RoutingContext req) {
     JsonObject jsonBody = req.getBodyAsJson();
     KryService service = new KryService(jsonBody.getString("url"), jsonBody.getString(("name")));
-    serviceDAO.create(service).setHandler( h -> {
+    serviceDAO.create(service).setHandler(h -> {
       if (h.succeeded()) {
         req.response()
             .putHeader("content-type", "application/json")
@@ -89,7 +90,7 @@ public class MainVerticle extends AbstractVerticle {
   private void deleteService(RoutingContext req) {
     String s = req.pathParam("id");
     Integer id = Integer.parseInt(s);
-    serviceDAO.delete(Integer.parseInt(req.pathParam("id"))).setHandler( h -> {
+    serviceDAO.delete(Integer.parseInt(req.pathParam("id"))).setHandler(h -> {
       req.response()
           .putHeader("content-type", "text/plain")
           .setStatusCode(204)

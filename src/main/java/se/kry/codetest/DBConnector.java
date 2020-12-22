@@ -16,7 +16,7 @@ public class DBConnector {
   private final String DB_PATH = "/Users/markdowman/Downloads/sqlite-tools-osx-x86-3340000/test.db";
   private final SQLClient client;
 
-  public DBConnector(Vertx vertx){
+  public DBConnector(Vertx vertx) {
     JsonObject config = new JsonObject()
         .put("url", "jdbc:sqlite:" + DB_PATH)
         .put("driver_class", "org.sqlite.JDBC")
@@ -31,17 +31,17 @@ public class DBConnector {
 
 
   public Future<ResultSet> query(String query, JsonArray params) {
-    if(query == null || query.isEmpty()) {
+    if (query == null || query.isEmpty()) {
       return Future.failedFuture("Query is null or empty");
     }
-    if(!query.endsWith(";")) {
+    if (!query.endsWith(";")) {
       query = query + ";";
     }
 
     Future<ResultSet> queryResultFuture = Future.future();
 
     client.queryWithParams(query, params, result -> {
-      if(result.failed()){
+      if (result.failed()) {
         queryResultFuture.fail(result.cause());
       } else {
         queryResultFuture.complete(result.result());

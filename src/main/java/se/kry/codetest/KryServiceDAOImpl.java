@@ -92,20 +92,20 @@ public class KryServiceDAOImpl implements KryServiceDAO {
     List<KryService> serviceList = new ArrayList<>();
     connector.query(selectAllQuery).setHandler(done -> {
       if (done.succeeded()) {
-          done.result().getResults().stream().forEach(s -> {
-            try {
-              serviceList.add(new KryService(
-                  s.getInteger(0),
-                  s.getString(1),
-                  s.getString(2),
-                  convertToTimestamp(s.getString(3)),
-                  ServiceStatus.valueOf(s.getString(4))));
-            } catch (ParseException e) {
-              // TODO: handle this more elegantly
-              e.printStackTrace();
-            }
-          });
-          future.complete(serviceList);
+        done.result().getResults().stream().forEach(s -> {
+          try {
+            serviceList.add(new KryService(
+                s.getInteger(0),
+                s.getString(1),
+                s.getString(2),
+                convertToTimestamp(s.getString(3)),
+                ServiceStatus.valueOf(s.getString(4))));
+          } catch (ParseException e) {
+            // TODO: handle this more elegantly
+            e.printStackTrace();
+          }
+        });
+        future.complete(serviceList);
       } else {
         done.cause().printStackTrace();
         future.fail(done.cause().getMessage());
@@ -115,8 +115,8 @@ public class KryServiceDAOImpl implements KryServiceDAO {
   }
 
   private Timestamp convertToTimestamp(String s) throws ParseException {
-      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-      Date parsedDate = dateFormat.parse(s);
-      return new java.sql.Timestamp(parsedDate.getTime());
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+    Date parsedDate = dateFormat.parse(s);
+    return new java.sql.Timestamp(parsedDate.getTime());
   }
 }
