@@ -21,6 +21,17 @@ import java.util.logging.Logger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+
+/***
+ * This tests the following features:
+ *  - services persisted over reboot
+ *  - adding name to service at creation time
+ *  - peristence of creation time of service
+ *  - polling of status of service and persistence of result
+ *
+ *  These tests need some further work once the test database
+ *  is initialised with services at setup (ie. it is in a known consistent state)
+ */
 @ExtendWith(VertxExtension.class)
 public class TestMainVerticle {
 
